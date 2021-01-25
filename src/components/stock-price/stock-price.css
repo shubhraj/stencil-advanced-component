@@ -12,8 +12,26 @@ form input{
     font: inherit;
     color: #3b013b;
     padding: 0.1rem 0.25rem; 
+    display: block;
+    margin-bottom: 0.15rem;
 }
 
-form input:focus{
+form input:focus,
+form button:focus {
     outline: none;
+}
+
+form button{
+    font-family: inherit;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #3b013b;
+    background: #3b013b;
+    color: white;
+    cursor: pointer;
+}
+
+form button:hover,
+form button:active {
+    background: #750175;
+    border-color: #750175;
 }

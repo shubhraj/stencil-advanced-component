@@ -1,4 +1,4 @@
-import { Component, h } from "@stencil/core";
+import { Component, h, State } from "@stencil/core";
 
 @Component({
     tag: 'wc-stock-price',
@@ -7,22 +7,33 @@ import { Component, h } from "@stencil/core";
 })
 
 export class StockPrice{
+    @State() fetchedPrice : number
  
     onFetchStockPrice(event) {
         event.preventDefault();
         console.log('submitted!');
+        fetch('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=IBM&apikey=demo')
+        .then(res => {
+            return res.json()
+        })
+        .then(parsedRes =>{
+           this.fetchedPrice = parsedRes["Global Quote"]['05. price'];
+        } )
+        .catch(e => {
+            console.log(e)
+        })
     }
 
     render(){
         return [
-            <form onSubmit={this.onFetchStockPrice}>
+            <form onSubmit={this.onFetchStockPrice.bind(this)}>
                 <input id='stock-symbol'/>
                 <button type='submit'>Fetch</button>
             </form>,
 
             <div>
                 <p>
-                    Price is : {0}
+                    Price is : {this.fetchedPrice}
                 </p>
             </div>    
         ];
