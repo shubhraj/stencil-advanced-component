@@ -14,7 +14,18 @@ export class StockPrice{
     @Element() el: HTMLElement;
 
     @State() fetchedPrice : number
- 
+    @State() stockUserInut: string;
+    @State() stockInputValid = false;
+
+    onUserInput(event: Event){
+        this.stockUserInut = (event.target as HTMLInputElement).value;
+        if(this.stockUserInut.trim() != ''){
+            this.stockInputValid = true;
+        }else{
+            this.stockInputValid = false;
+        }
+    }
+
     onFetchStockPrice(event) {
         event.preventDefault();
         //const stockSymbol = (this.el.shadowRoot.querySelector("#stock-symbol") as HTMLInputElement).value;
@@ -22,6 +33,9 @@ export class StockPrice{
         
         fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stockSymbol}&apikey=${AV_API_KEY}`)
         .then(res => {
+            if(res.status !== 200){
+                throw new Error('Invalid req!');
+            }
             return res.json()
         })
         .then(parsedRes =>{
@@ -35,8 +49,13 @@ export class StockPrice{
     render(){
         return [
             <form onSubmit={this.onFetchStockPrice.bind(this)}>
-                <input id='stock-symbol' ref={ el => this.stockElement = el }/>
-                <button type='submit'>Fetch</button>
+                <input id='stock-symbol' 
+                ref={ el => this.stockElement = el } 
+                value={this.stockUserInut}
+                onInput={this.onUserInput.bind(this)}
+                />
+                
+                <button type='submit' disabled={!this.stockInputValid}>Fetch</button>
             </form>,
 
             <div>
