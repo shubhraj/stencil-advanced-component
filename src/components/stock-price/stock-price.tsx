@@ -1,4 +1,4 @@
-import { Component, h, State, Element, Prop } from "@stencil/core";
+import { Component, h, State, Element, Prop, Watch } from "@stencil/core";
 import { AV_API_KEY } from "../../global/global";
 
 @Component({
@@ -10,14 +10,28 @@ import { AV_API_KEY } from "../../global/global";
 export class StockPrice{
     
     stockElement : HTMLInputElement;
+    //initialStockSymbol : string;
 
     @Element() el: HTMLElement;
-
+    
+    //State
     @State() fetchedPrice : number
     @State() stockUserInut: string;
     @State() stockInputValid = false;
     @State() error: string;
-    @Prop() stockSymbol : string; 
+    
+    //Props
+    @Prop({mutable: true, reflect: true}) stockSymbol : string; 
+    
+    //Watchers
+    @Watch('stockSymbol')
+    stockSymbolChanged(newValue:string, oldValue:string){
+        if(newValue !== oldValue){
+            this.stockUserInut = newValue;
+            this.fetchStockPrice(newValue);
+        }
+    }
+
 
     onUserInput(event: Event){
         this.stockUserInut = (event.target as HTMLInputElement).value;
@@ -31,12 +45,16 @@ export class StockPrice{
     onFetchStockPrice(event) {
         event.preventDefault();
         //const stockSymbol = (this.el.shadowRoot.querySelector("#stock-symbol") as HTMLInputElement).value;
-        const stockSymbol = this.stockElement.value;
-        this.fetchStockPrice(stockSymbol);
+        this.stockSymbol = this.stockElement.value;
+        //this.fetchStockPrice(stockSymbol);
     }
 
     componentDidLoad(){
+        console.log('Component Did Load!');
         if(this.stockSymbol){
+           // this.initialStockSymbol = this.stockSymbol;
+            this.stockUserInut = this.stockSymbol;
+            this.stockInputValid = true;
             this.fetchStockPrice(this.stockSymbol);
         }
     }
@@ -47,6 +65,13 @@ export class StockPrice{
 
     componentDidUpdate(){
         console.log('Component Did Update')
+        // if(this.stockSymbol !== this.initialStockSymbol){
+        //     this.initialStockSymbol = this.stockSymbol;
+        //     //this.stockUserInut = this.stockSymbol;
+        //     this.fetchStockPrice(this.stockSymbol);
+
+        // }
+
     }
 
     disconnectedCallback(){
