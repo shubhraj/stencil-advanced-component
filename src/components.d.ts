@@ -67,6 +67,7 @@ declare namespace LocalJSX {
         "middle"?: string;
     }
     interface StockFinder {
+        "onWcSymbolSelected"?: (event: CustomEvent<string>) => void;
     }
     interface WcStockPrice {
         "stockSymbol"?: string;

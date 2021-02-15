@@ -9,7 +9,14 @@
     <script nomodule src="/build/stencil-advanced-component.js"></script>
   </head>
   <body>
-    <!-- <wc-stock-price stock-symbol='AAPL'></wc-stock-price> -->
+    <wc-stock-price stock-symbol='AAPL'></wc-stock-price>
     <stock-finder></stock-finder>
+
+    <!-- <script>
+      const stockFinder = document.querySelector('stock-finder');
+      stockFinder.addEventListener('wcSymbolSelected', (event)=> {
+          console.log(event);
+      })
+    </script> -->
   </body>
 </html>

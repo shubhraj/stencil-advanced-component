@@ -1,4 +1,4 @@
-import { Component, h, State, Element, Prop, Watch } from "@stencil/core";
+import { Component, h, State, Element, Prop, Watch, Listen } from "@stencil/core";
 import { AV_API_KEY } from "../../global/global";
 
 @Component({
@@ -28,6 +28,7 @@ export class StockPrice{
     stockSymbolChanged(newValue:string, oldValue:string){
         if(newValue !== oldValue){
             this.stockUserInut = newValue;
+            this.stockInputValid = true;
             this.fetchStockPrice(newValue);
         }
     }
@@ -78,6 +79,13 @@ export class StockPrice{
         console.log('component Did Unload');
     }
 
+    @Listen('wcSymbolSelected', {target: 'body'})
+    onStockSymbolSelected(event: CustomEvent){
+        if(event.detail && event.detail !== this.stockSymbol){
+            this.stockSymbol = event.detail;
+        }
+    }
+
     fetchStockPrice(stockSymbol: string) {
         fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stockSymbol}&apikey=${AV_API_KEY}`)
         .then(res => {
@@ -96,6 +104,7 @@ export class StockPrice{
         })
         .catch(e => {
            this.error = e.message;
+           this.fetchedPrice = null;
         })
     }
 
