@@ -22,6 +22,8 @@ export namespace Components {
     }
     interface StockFinder {
     }
+    interface WcSpinner {
+    }
     interface WcStockPrice {
         "stockSymbol": string;
     }
@@ -39,6 +41,12 @@ declare global {
         prototype: HTMLStockFinderElement;
         new (): HTMLStockFinderElement;
     };
+    interface HTMLWcSpinnerElement extends Components.WcSpinner, HTMLStencilElement {
+    }
+    var HTMLWcSpinnerElement: {
+        prototype: HTMLWcSpinnerElement;
+        new (): HTMLWcSpinnerElement;
+    };
     interface HTMLWcStockPriceElement extends Components.WcStockPrice, HTMLStencilElement {
     }
     var HTMLWcStockPriceElement: {
@@ -48,6 +56,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "my-component": HTMLMyComponentElement;
         "stock-finder": HTMLStockFinderElement;
+        "wc-spinner": HTMLWcSpinnerElement;
         "wc-stock-price": HTMLWcStockPriceElement;
     }
 }
@@ -69,12 +78,15 @@ declare namespace LocalJSX {
     interface StockFinder {
         "onWcSymbolSelected"?: (event: CustomEvent<string>) => void;
     }
+    interface WcSpinner {
+    }
     interface WcStockPrice {
         "stockSymbol"?: string;
     }
     interface IntrinsicElements {
         "my-component": MyComponent;
         "stock-finder": StockFinder;
+        "wc-spinner": WcSpinner;
         "wc-stock-price": WcStockPrice;
     }
 }
@@ -84,6 +96,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
             "stock-finder": LocalJSX.StockFinder & JSXBase.HTMLAttributes<HTMLStockFinderElement>;
+            "wc-spinner": LocalJSX.WcSpinner & JSXBase.HTMLAttributes<HTMLWcSpinnerElement>;
             "wc-stock-price": LocalJSX.WcStockPrice & JSXBase.HTMLAttributes<HTMLWcStockPriceElement>;
         }
     }
